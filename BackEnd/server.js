@@ -33,7 +33,7 @@ const movieModel = new mongoose.model('sdfsdfsdf45',movieSchema);
 
 app.get('/api/exchange-rates', async (req, res) => {
   try {
-    const response = await axios.get('https://api.exchangerate-api.com/v4/latest/USD');
+    const response = await axios.get('https://api.exchangerate-api.com/v4/latest/USD'); // Always use USD
     res.status(200).json(response.data);
   } catch (error) {
     console.error('Error fetching exchange rates:', error.message);

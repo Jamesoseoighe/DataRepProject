@@ -1,49 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-// Flag mapping for valid currencies or special cases
 const flagMapping = {
-  EUR: 'eu', // European Union
-  USD: 'us', // United States
-  GBP: 'gb', // Great Britain
-  INR: 'in', // India
-  JPY: 'jp', // Japan
-  AUD: 'au', // Australia
-  CAD: 'ca', // Canada
-  CNY: 'cn', // China
+  EUR: 'eu',
+  USD: 'us',
+  GBP: 'gb',
+  INR: 'in',
+  JPY: 'jp',
+  AUD: 'au',
+  CAD: 'ca',
+  CNY: 'cn',
 };
 
 const ExchangeRates = () => {
   const [rates, setRates] = useState({});
-  const [base, setBase] = useState('USD');
-  const [target, setTarget] = useState('EUR');
-  const [amount, setAmount] = useState(1);
-  const [convertedAmount, setConvertedAmount] = useState(0);
+  const [target, setTarget] = useState('EUR'); // Default target currency
+  const [amount, setAmount] = useState(1); // Amount in USD
+  const [convertedAmount, setConvertedAmount] = useState(null); // Conversion result
+  const [isLoading, setIsLoading] = useState(false); // Loading state for fetching rates
   const [error, setError] = useState(null);
 
+  // Fetch exchange rates (always using USD as the base currency)
   useEffect(() => {
     const fetchRates = async () => {
+      setIsLoading(true); // Start loading
       try {
-        const response = await axios.get('http://localhost:4000/api/exchange-rates');
+        const response = await axios.get('http://localhost:4000/api/exchange-rates'); // No need for base parameter
         setRates(response.data.rates);
-        setBase(response.data.base);
-        setConvertedAmount(response.data.rates[target] * amount);
+        setIsLoading(false); // Stop loading
       } catch (err) {
         console.error('Error fetching exchange rates:', err.message);
         setError('Failed to fetch exchange rates');
+        setIsLoading(false); // Stop loading even on error
       }
     };
 
     fetchRates();
-  }, [amount, target]);
+  }, []);
 
-  const handleAmountChange = (e) => {
-    setAmount(e.target.value);
+  // Handle conversion when button is clicked
+  const handleConvert = () => {
+    if (target === 'USD') {
+      setConvertedAmount(amount); // No conversion needed for USD
+    } else if (rates[target]) {
+      const conversionRate = rates[target]; // Directly use the rate for the target currency
+      setConvertedAmount(amount * conversionRate);
+    } else {
+      setConvertedAmount(0); // Default to 0 if no rate is available
+    }
   };
 
-  const handleTargetChange = (e) => {
-    setTarget(e.target.value);
-  };
+  const handleAmountChange = (e) => setAmount(parseFloat(e.target.value) || 0);
+  const handleTargetChange = (e) => setTarget(e.target.value);
 
   const getFlagUrl = (currencyCode) => {
     const countryCode = flagMapping[currencyCode] || currencyCode.slice(0, 2).toLowerCase();
@@ -56,10 +64,10 @@ const ExchangeRates = () => {
 
   return (
     <div>
-      <h1>Exchange Rates (Base: {base})</h1>
-      
+      <h1>Currency Converter</h1>
+
       <div style={{ marginBottom: '20px' }}>
-        <label htmlFor="amount">Amount: </label>
+        <label htmlFor="amount">Amount (USD): </label>
         <input
           type="number"
           id="amount"
@@ -67,6 +75,7 @@ const ExchangeRates = () => {
           onChange={handleAmountChange}
           style={{ marginRight: '10px' }}
         />
+
         <label htmlFor="target">Convert to: </label>
         <select id="target" value={target} onChange={handleTargetChange}>
           {Object.keys(rates).map((currency) => (
@@ -75,12 +84,24 @@ const ExchangeRates = () => {
             </option>
           ))}
         </select>
+
+        <button
+          onClick={handleConvert}
+          style={{ marginLeft: '10px', padding: '5px 10px' }}
+          disabled={isLoading} // Disable button while fetching rates
+        >
+          {isLoading ? 'Loading...' : 'Convert'}
+        </button>
       </div>
 
-      <p>
-        {amount} {base} = {convertedAmount.toFixed(2)} {target}
-      </p>
+      {/* Show conversion result only when convertedAmount is not null */}
+      {convertedAmount !== null && (
+        <p>
+          {amount} USD = {convertedAmount.toFixed(2)} {target}
+        </p>
+      )}
 
+      <h2>Exchange Rates</h2>
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {Object.entries(rates).map(([currency, rate]) => (
           <li
