@@ -1,6 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
-const port = 4000;
+
 
 const cors = require('cors');
 app.use(cors());
@@ -16,8 +17,10 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://admin:admin@martinscluster.w5rtkz0.mongodb.net/DB14');
+
+mongoose.connect('mongodb+srv://admin:admin@martinscluster.w5rtkz0.mongodb.net/DB14', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Failed to connect to MongoDB', err));
 
 const movieSchema = new mongoose.Schema({
   title:String,
@@ -62,8 +65,9 @@ app.post('/api/movies',async (req, res)=>{
     res.status(201).json({"message":"Movie Added!",Movie:newMovie});
 })
 
+const port = 4000;
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
 
 // {
