@@ -1,4 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
+import ExchangeRates from './components/ExchangeRates';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
 import Header from './components/header';
@@ -10,7 +12,19 @@ import Edit from './components/edit';
 
 
 function App() {
+
   return (
+    <div>
+      <h1>Currency Exchange Rates</h1>
+      <ExchangeRates />
+    </div>
+  );
+
+
+  /*
+  return (
+    
+
     <Router>
       <NavigationBar />
       <Routes>
@@ -18,10 +32,12 @@ function App() {
         <Route path="/read" element={<Read />} />
         <Route path="/create" element={<Create />} />
         <Route path='/edit/:id' element={<Edit />} />
+        
       </Routes>
       <Footer />
     </Router>
-  );
+  );*/
+
 }
 
 export default App;

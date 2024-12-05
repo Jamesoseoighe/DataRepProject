@@ -44,7 +44,7 @@ app.get('/api/exchange-rates', async (req, res) => {
 /*
 app.get('/api/movies', async (req, res) => {
     const movies = await movieModel.find({});
-    res.status(200).json({movies})
+    res.status(200).json({movies})i
 });
 
 app.get('/api/movie/:id', async (req ,res)=>{
