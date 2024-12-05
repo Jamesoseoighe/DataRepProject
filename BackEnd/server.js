@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const axios = require('axios');
 
 
 const cors = require('cors');
@@ -30,6 +31,17 @@ const movieSchema = new mongoose.Schema({
 
 const movieModel = new mongoose.model('sdfsdfsdf45',movieSchema);
 
+app.get('/api/exchange-rates', async (req, res) => {
+  try {
+    const response = await axios.get('https://api.exchangerate-api.com/v4/latest/USD');
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error('Error fetching exchange rates:', error.message);
+    res.status(500).json({ error: 'Failed to fetch exchange rates' });
+  }
+});
+
+/*
 app.get('/api/movies', async (req, res) => {
     const movies = await movieModel.find({});
     res.status(200).json({movies})
@@ -64,6 +76,8 @@ app.post('/api/movies',async (req, res)=>{
 
     res.status(201).json({"message":"Movie Added!",Movie:newMovie});
 })
+*/
+
 
 const port = 4000;
 app.listen(port, () => {
