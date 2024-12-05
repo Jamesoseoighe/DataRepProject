@@ -37,6 +37,16 @@ app.get('/api/movie/:id', async (req ,res)=>{
   res.json(movie);
 })
 
+
+app.delete('/api/movie/:id', async (req, res) => {
+  
+  console.log('Deleting movie with ID:', req.params.id);
+  const movie = await movieModel.findByIdAndDelete(req.params.id);
+  res.status(200).send({ message: "Movie deleted successfully", movie });
+  
+}
+)
+
 app.put('/api/movie/:id', async (req, res)=>{
   const movie = await movieModel.findByIdAndUpdate(req.params.id, req.body, {new:true});
   res.send(movie);
