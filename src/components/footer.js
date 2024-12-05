@@ -1,5 +1,11 @@
+import React from 'react';
+
 const Footer = () => {
-    return <h3>My Footer in another component</h3>;
-  };
-  
-  export default Footer;
+  return (
+    <footer style={{ textAlign: 'center', padding: '10px', backgroundColor: '#f8f9fa' }}>
+      <p>&copy; 2024 Currency App. All rights reserved.</p>
+    </footer>
+  );
+};
+
+export default Footer;
