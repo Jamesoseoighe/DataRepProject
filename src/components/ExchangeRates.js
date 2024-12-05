@@ -13,12 +13,12 @@ const flagMapping = {
   CNY: 'cn', // China
 };
 
-// List of unsupported currencies that won't display
-const unsupportedCurrencies = ['XAF', 'XDR', 'ANG', 'ACD','XCD','XOF','XPF'];
-
 const ExchangeRates = () => {
   const [rates, setRates] = useState({});
   const [base, setBase] = useState('USD');
+  const [target, setTarget] = useState('EUR');
+  const [amount, setAmount] = useState(1);
+  const [convertedAmount, setConvertedAmount] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -27,6 +27,7 @@ const ExchangeRates = () => {
         const response = await axios.get('http://localhost:4000/api/exchange-rates');
         setRates(response.data.rates);
         setBase(response.data.base);
+        setConvertedAmount(response.data.rates[target] * amount);
       } catch (err) {
         console.error('Error fetching exchange rates:', err.message);
         setError('Failed to fetch exchange rates');
@@ -34,9 +35,16 @@ const ExchangeRates = () => {
     };
 
     fetchRates();
-  }, []);
+  }, [amount, target]);
 
-  // Helper function to get the flag URL
+  const handleAmountChange = (e) => {
+    setAmount(e.target.value);
+  };
+
+  const handleTargetChange = (e) => {
+    setTarget(e.target.value);
+  };
+
   const getFlagUrl = (currencyCode) => {
     const countryCode = flagMapping[currencyCode] || currencyCode.slice(0, 2).toLowerCase();
     return `https://flagcdn.com/w40/${countryCode}.png`;
@@ -49,23 +57,45 @@ const ExchangeRates = () => {
   return (
     <div>
       <h1>Exchange Rates (Base: {base})</h1>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
-        {Object.entries(rates)
-          .filter(([currency]) => !unsupportedCurrencies.includes(currency)) // Exclude unsupported currencies
-          .map(([currency, rate]) => (
-            <li
-              key={currency}
-              style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}
-            >
-              <img
-                src={getFlagUrl(currency)}
-                alt={`${currency} flag`}
-                onError={(e) => (e.target.style.display = 'none')} // Hide image if it fails to load
-                style={{ width: '30px', height: '20px', marginRight: '10px', borderRadius: '3px' }}
-              />
-              <span>{currency}: {rate.toFixed(2)}</span>
-            </li>
+      
+      <div style={{ marginBottom: '20px' }}>
+        <label htmlFor="amount">Amount: </label>
+        <input
+          type="number"
+          id="amount"
+          value={amount}
+          onChange={handleAmountChange}
+          style={{ marginRight: '10px' }}
+        />
+        <label htmlFor="target">Convert to: </label>
+        <select id="target" value={target} onChange={handleTargetChange}>
+          {Object.keys(rates).map((currency) => (
+            <option key={currency} value={currency}>
+              {currency}
+            </option>
           ))}
+        </select>
+      </div>
+
+      <p>
+        {amount} {base} = {convertedAmount.toFixed(2)} {target}
+      </p>
+
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
+        {Object.entries(rates).map(([currency, rate]) => (
+          <li
+            key={currency}
+            style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}
+          >
+            <img
+              src={getFlagUrl(currency)}
+              alt={`${currency} flag`}
+              onError={(e) => (e.target.style.display = 'none')}
+              style={{ width: '30px', height: '20px', marginRight: '10px', borderRadius: '3px' }}
+            />
+            <span>{currency}: {rate.toFixed(2)}</span>
+          </li>
+        ))}
       </ul>
     </div>
   );
