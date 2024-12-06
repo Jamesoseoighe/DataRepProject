@@ -1,39 +1,39 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const app = express();
+const cors = require('cors');
 const axios = require('axios');
 
+// Initialize Express App
+const app = express();
 
-const cors = require('cors');
+// Middleware
 app.use(cors());
+app.use(express.json()); // Parse incoming JSON data
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+// MongoDB Connection
+const dbURI = 'mongodb+srv://admin:admin@financedata.uucpc.mongodb.net/';
+
+// Connect to MongoDB
+mongoose
+  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('Error connecting to MongoDB:', err));
+
+// Expense Schema and Model
+const expenseSchema = new mongoose.Schema({
+  name: { type: String, required: true }, // Name of the expense
+  amount: { type: Number, required: true }, // Expense amount
+  category: { type: String, required: true }, // Category (e.g., Food, Rent)
+  date: { type: Date, default: Date.now }, // Date of the expense
 });
 
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+const Expense = mongoose.model('Expense', expenseSchema);
 
-
-mongoose.connect('mongodb+srv://admin:admin@martinscluster.w5rtkz0.mongodb.net/DB14', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Failed to connect to MongoDB', err));
-
-const movieSchema = new mongoose.Schema({
-  title:String,
-  year:String,
-  poster:String
-});
-
-const movieModel = new mongoose.model('sdfsdfsdf45',movieSchema);
+// Routes
 
 app.get('/api/exchange-rates', async (req, res) => {
   try {
-    const response = await axios.get('https://api.exchangerate-api.com/v4/latest/USD'); // Always use USD
+    const response = await axios.get('https://api.exchangerate-api.com/v4/latest/USD');
     res.status(200).json(response.data);
   } catch (error) {
     console.error('Error fetching exchange rates:', error.message);
@@ -41,67 +41,53 @@ app.get('/api/exchange-rates', async (req, res) => {
   }
 });
 
-/*
-app.get('/api/movies', async (req, res) => {
-    const movies = await movieModel.find({});
-    res.status(200).json({movies})i
+
+// 1. Add a New Expense
+app.post('/api/expenses', async (req, res) => {
+  try {
+    const { name, amount, category } = req.body;
+    const expense = new Expense({ name, amount, category });
+    await expense.save();
+    res.status(201).json(expense);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
-app.get('/api/movie/:id', async (req ,res)=>{
-  const movie = await movieModel.findById(req.params.id);
-  res.json(movie);
-})
-
-
-app.delete('/api/movie/:id', async (req, res) => {
-  
-  console.log('Deleting movie with ID:', req.params.id);
-  const movie = await movieModel.findByIdAndDelete(req.params.id);
-  res.status(200).send({ message: "Movie deleted successfully", movie });
-  
-}
-)
-
-app.put('/api/movie/:id', async (req, res)=>{
-  const movie = await movieModel.findByIdAndUpdate(req.params.id, req.body, {new:true});
-  res.send(movie);
-})
-
-app.post('/api/movies',async (req, res)=>{
-    console.log(req.body.title);
-    const {title, year, poster} = req.body;
-
-    const newMovie = new movieModel({title, year, poster});
-    await newMovie.save();
-
-    res.status(201).json({"message":"Movie Added!",Movie:newMovie});
-})
-*/
-
-
-const port = 4000;
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+// 2. Get All Expenses
+app.get('/api/expenses', async (req, res) => {
+  try {
+    const expenses = await Expense.find();
+    res.json(expenses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// {
-//   "Title": "Avengers: Infinity War (server)",
-//   "Year": "2018",
-//   "imdbID": "tt4154756",
-//   "Type": "movie",
-//   "Poster": "https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_SX300.jpg"
-// },
-// {
-//   "Title": "Captain America: Civil War (server)",
-//   "Year": "2016",
-//   "imdbID": "tt3498820",
-//   "Type": "movie",
-//   "Poster": "https://m.media-amazon.com/images/M/MV5BMjQ0MTgyNjAxMV5BMl5BanBnXkFtZTgwNjUzMDkyODE@._V1_SX300.jpg"
-// },
-// {
-//   "Title": "World War Z (server)",
-//   "Year": "2013",
-//   "imdbID": "tt0816711",
-//   "Type": "movie",
-//   "Poster": "https://m.media-amazon.com/images/M/MV5BNDQ4YzFmNzktMmM5ZC00MDZjLTk1OTktNDE2ODE4YjM2MjJjXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg"
-// }
+// 3. Update an Expense by ID
+app.put('/api/expenses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedExpense = await Expense.findByIdAndUpdate(id, req.body, { new: true });
+    res.json(updatedExpense);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. Delete an Expense by ID
+app.delete('/api/expenses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Expense.findByIdAndDelete(id);
+    res.json({ message: 'Expense deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Start the Server
+const PORT = 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

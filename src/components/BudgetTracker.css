@@ -1,0 +1,57 @@
+.budget-tracker {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .expense-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .expense-form input,
+  .expense-form button {
+    padding: 10px;
+    font-size: 1em;
+  }
+  
+  .expense-list ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .expense-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .expense-list button {
+    padding: 5px 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .expense-list button:hover {
+    background-color: darkred;
+  }
+  
+  .total-expenses {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #555;
+  }
+  
