@@ -1,16 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const ExpenseList = ({ expenses }) => {
+const ExpenseList = () => {
+  const [expenses, setExpenses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/expenses');
+        setExpenses(response.data.expenses);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching expenses:', err);
+      }
+    };
+
+    fetchExpenses();
+  }, []);
+
   return (
     <div>
       <h2>Expense List</h2>
-      <ul>
-        {expenses.map((expense, index) => (
-          <li key={index} style={{ marginBottom: '10px' }}>
-            <strong>{expense.name}:</strong> ${expense.amount.toFixed(2)}
-          </li>
-        ))}
-      </ul>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ul>
+          {expenses.map((expense) => (
+            <li key={expense._id}>
+              {expense.name} - ${expense.amount} ({expense.category})
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
