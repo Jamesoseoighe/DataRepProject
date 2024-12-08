@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './BudgetTracker.css';
 
+
 const ExpenseList = () => {
   const [expenses = [], setExpenses, onDeleteExpense, onEditExpense ] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,8 +32,9 @@ const ExpenseList = () => {
         {expenses.map((expense) => (
           <li key={expense._id}>
             <strong>{expense.name}</strong> - ${expense.amount.toFixed(2)} ({expense.category})
-            <button onClick={() => onEditExpense(expense)}>Edit</button>
-            <button onClick={() => onDeleteExpense(expense._id)}>Delete</button>
+            <button className="edit-button" onClick={() => onEditExpense(expense)}>Edit</button>
+            <button className="delete-button" onClick={() => onDeleteExpense(expense._id)}>Delete</button>
+           
           </li>
         ))}
       </ul>

@@ -38,14 +38,16 @@
   
   .expense-list button {
     padding: 5px 10px;
-    background-color: red;
+    background-color: rgb(99, 99, 184);
     color: white;
     border: none;
     cursor: pointer;
   }
   
+  
+  
   .expense-list button:hover {
-    background-color: darkred;
+    background-color: rgb(111, 0, 139);
   }
   
   .total-expenses {

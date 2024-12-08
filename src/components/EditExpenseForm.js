@@ -26,6 +26,7 @@ const EditExpenseForm = ({ expenseToEdit, onUpdateSuccess, onCancel }) => {
       console.error('Error updating expense:', err);
     }
   };
+  
 
   return (
     <form className="expense-form" onSubmit={handleSubmit}>
