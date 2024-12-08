@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './BudgetTracker.css';
 
 const ExpenseList = () => {
-  const [expenses, setExpenses] = useState([]);
+  const [expenses = [], setExpenses, onDeleteExpense, onEditExpense ] = useState([]);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -25,16 +27,20 @@ const ExpenseList = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <ul>
-          {expenses.map((expense) => (
-            <li key={expense._id}>
-              {expense.name} - ${expense.amount} ({expense.category})
-            </li>
-          ))}
-        </ul>
+       <ul>
+        {expenses.map((expense) => (
+          <li key={expense._id}>
+            <strong>{expense.name}</strong> - ${expense.amount.toFixed(2)} ({expense.category})
+            <button onClick={() => onEditExpense(expense)}>Edit</button>
+            <button onClick={() => onDeleteExpense(expense._id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
       )}
     </div>
+    
   );
 };
+
 
 export default ExpenseList;

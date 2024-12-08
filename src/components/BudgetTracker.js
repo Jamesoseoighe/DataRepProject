@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import ExpenseForm from './ExpenseForm';
+import ExpenseList from './ExpenseList';
+import EditExpenseForm from './EditExpenseForm';
 import './BudgetTracker.css'; // Optional: Add your styling here
 
 const BudgetTracker = () => {
@@ -9,6 +12,7 @@ const BudgetTracker = () => {
   const [category, setCategory] = useState(''); // Expense category input
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
+  const [editingExpense, setEditingExpense] = useState(null);// Expense being edited
 
   // Fetch expenses from the backend
   useEffect(() => {
@@ -48,6 +52,30 @@ const BudgetTracker = () => {
     }
   };
 
+
+   // Handle successful update of an expense
+   const handleUpdateSuccess = async () => {
+    try {
+      const response = await axios.get('http://localhost:4000/api/expenses');
+      setExpenses(response.data);
+      setEditingExpense(null); // Close the edit form
+    } catch (err) {
+      console.error('Error refreshing expenses:', err);
+    }
+  };
+
+   // Handle edit button click
+   const handleEditExpense = (expense) => {
+    setEditingExpense(expense);
+  };
+
+
+  const handleCancelEdit = () => {
+    setEditingExpense(null); // Close the edit form
+  };
+
+
+
   // Handle deleting an expense
   const handleDeleteExpense = async (id) => {
     try {
@@ -68,49 +96,58 @@ const BudgetTracker = () => {
     <div className="budget-tracker">
       <h1>Budget Tracker</h1>
 
-      {/* Expense Form */}
-      <form className="expense-form" onSubmit={handleAddExpense}>
-        <input
-          type="text"
-          placeholder="Expense Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-        <button type="submit">Add Expense</button>
-      </form>
+      {/* Conditionally Render Forms */}
+{editingExpense ? (
+  <EditExpenseForm
+    expenseToEdit={editingExpense}
+    onUpdateSuccess={handleUpdateSuccess}
+    onCancel={handleCancelEdit}
+  />
+) : (
+  <form className="expense-form" onSubmit={handleAddExpense}>
+    <input
+      type="text"
+      placeholder="Expense Name"
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+    />
+    <input
+      type="number"
+      placeholder="Amount"
+      value={amount}
+      onChange={(e) => setAmount(e.target.value)}
+    />
+    <input
+      type="text"
+      placeholder="Category"
+      value={category}
+      onChange={(e) => setCategory(e.target.value)}
+    />
+    <button type="submit">Add Expense</button>
+  </form>
+)}
 
-      {/* Expense List */}
-      <div className="expense-list">
-        <h2>Expenses</h2>
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p className="error">{error}</p>
-        ) : expenses.length === 0 ? (
-          <p>No expenses added yet</p>
-        ) : (
-          <ul>
-            {expenses.map((expense) => (
-              <li key={expense._id}>
-                <strong>{expense.name}</strong> - ${expense.amount.toFixed(2)} ({expense.category})
-                <button onClick={() => handleDeleteExpense(expense._id)}>Delete</button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+     {/* Expense List */}
+<div className="expense-list">
+  <h2>Expenses</h2>
+  {loading ? (
+    <p>Loading...</p>
+  ) : error ? (
+    <p className="error">{error}</p>
+  ) : expenses.length === 0 ? (
+    <p>No expenses added yet</p>
+  ) : (
+    <ul>
+      {expenses.map((expense) => (
+        <li key={expense._id}>
+          <strong>{expense.name}</strong> - ${expense.amount.toFixed(2)} ({expense.category})
+          <button onClick={() => handleEditExpense(expense)}>Edit</button> {/* New Edit Button */}
+          <button onClick={() => handleDeleteExpense(expense._id)}>Delete</button>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
 
       {/* Total Expenses */}
       <div className="total-expenses">

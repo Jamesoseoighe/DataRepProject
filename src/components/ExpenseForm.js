@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './BudgetTracker.css';
 
 const ExpenseForm = ({ onExpenseAdded }) => {
   const [name, setName] = useState('');
@@ -24,7 +25,8 @@ const ExpenseForm = ({ onExpenseAdded }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="expense-form" onSubmit={handleSubmit}>
+      <h2>Add New Expense</h2>
       <input
         type="text"
         placeholder="Expense Name"

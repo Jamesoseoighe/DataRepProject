@@ -86,6 +86,31 @@ app.delete('/api/expenses/:id', async (req, res) => {
   }
 });
 
+
+//UPDATE EXPENSE
+app.put('/api/expenses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedExpense = await Expense.findByIdAndUpdate(id, req.body, { new: true });
+    res.json(updatedExpense);
+  } catch (err) {
+    console.error('Error updating expense:', err.message);
+    res.status(500).json({ error: 'Failed to update expense' });
+  }
+});
+
+//DELETE EXPENSE 
+app.delete('/api/expenses/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Expense.findByIdAndDelete(id);
+    res.json({ message: 'Expense deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting expense:', err.message);
+    res.status(500).json({ error: 'Failed to delete expense' });
+  }
+});
+
 // Start the Server
 const PORT = 4000;
 app.listen(PORT, () => {
