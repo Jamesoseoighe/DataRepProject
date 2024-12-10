@@ -23,3 +23,17 @@ Copy code
 1. Clone the repository:
    ```bash
    git clone https://github.com/Jamesoseoighe/DataRepProject.git
+### Additional Information
+Dependencies
+The project uses the following dependencies:
+
+### Backend
+- Express: Web framework for building the backend.
+- Mongoose: ODM library for MongoDB.
+- Cors: Middleware for Cross-Origin Resource Sharing.
+- Axios: HTTP client for making API requests.
+### Frontend
+- React: Frontend library for building the UI.
+- React Router DOM: For managing routing in React.
+- Recharts: For creating data visualizations (charts).
+- Axios: For making HTTP requests.
