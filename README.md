@@ -24,6 +24,20 @@ Copy code
    ```bash
    git clone https://github.com/Jamesoseoighe/DataRepProject.git
    ```
+2. Install Dependencies:
+Backend
+- Navigate to the backend folder
+     ```bash
+     cd backend
+     ```
+- Install the required backend dependencies:
+     ```bash
+     npm install
+     ```
+Frontend
+ - Navigate to the frontend folder:
+
+   
 ### Additional Information
 Dependencies
 The project uses the following dependencies:
@@ -50,7 +64,7 @@ The project uses the following dependencies:
 - Submit the form to update the expense.
 3. Viewing Graphical Reports
 - Navigate to the "Charts" page.
-  
+
 View:
 - Horizontal Bar Chart: Ranks categories by total spending.
 - Pie Chart: Displays the distribution of expenses.
