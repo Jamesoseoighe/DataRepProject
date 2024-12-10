@@ -1,8 +1,6 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
 
+import { Link } from 'react-router-dom';
+import React from 'react';
 
 const NavigationBar = () => {
   return (
@@ -21,6 +19,9 @@ const NavigationBar = () => {
             </li>
             <li className="nav-item">
               <Link className="nav-link" to="/budget-tracker">Budget Tracker</Link>
+            </li>
+            <li className="nav-item">
+            <Link className="nav-link" to="/charts">Charts</Link>
             </li>
           </ul>
         </div>
