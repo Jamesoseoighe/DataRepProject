@@ -5,7 +5,10 @@ Setup Instructions:
 ### Features
 Expense Tracking:
  - Add, edit, and delete expenses.
-- Categorize expenses for better organization.
+ - Categorize expenses for better organization.
+
+Expense Categorization: 
+- Organize expenses by categories like Food, Rent, and Entertainment.
 
 Graphical Reports:
   - View a horizontal bar chart ranking expense categories by total spending.
