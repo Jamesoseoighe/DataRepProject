@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes,Navigate } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar';
 import Footer from './components/footer';
 import ExchangeRates from './components/ExchangeRates';
@@ -16,6 +16,7 @@ function App() {
 
       {/* Define Routes */}
       <Routes>
+      <Route path="/" element={<Navigate to="/home" />} /> //starts on /home instead of 
         <Route path="/Home" element={<Home />} />
         <Route path="/exchange-rates" element={<ExchangeRates />} />
         <Route path="/budget-tracker" element={<BudgetTracker />} />

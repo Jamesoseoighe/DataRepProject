@@ -26,11 +26,9 @@ const expenseSchema = new mongoose.Schema({
   category: { type: String, required: true }, // Category (e.g., Food, Rent)
   date: { type: Date, default: Date.now }, // Date of the expense
 });
-
 const Expense = mongoose.model('Expense', expenseSchema);
 
 // Routes
-
 app.get('/api/exchange-rates', async (req, res) => {
   try {
     const response = await axios.get('https://api.exchangerate-api.com/v4/latest/USD');

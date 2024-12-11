@@ -3,11 +3,11 @@ import axios from 'axios';
 import './BudgetTracker.css';
 
 const EditExpenseForm = ({ expenseToEdit, onUpdateSuccess, onCancel }) => {
-  const [name, setName] = useState('');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
+  const [name, setName] = useState(''); // State for expense name
+  const [amount, setAmount] = useState(''); // State for expense amount
+  const [category, setCategory] = useState(''); // State for expense category
 
-  // Populate the form with the existing expense details
+  // Populate the form fields with the expense details being edited
   useEffect(() => {
     if (expenseToEdit) {
       setName(expenseToEdit.name);
@@ -16,17 +16,17 @@ const EditExpenseForm = ({ expenseToEdit, onUpdateSuccess, onCancel }) => {
     }
   }, [expenseToEdit]);
 
+  // Handle form submission for updating the expense
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const updatedExpense = { name, amount: parseFloat(amount), category };
       await axios.put(`http://localhost:4000/api/expenses/${expenseToEdit._id}`, updatedExpense);
-      onUpdateSuccess(); // Refresh the list and exit edit mode
+      onUpdateSuccess(); // Notify parent to refresh and exit edit mode
     } catch (err) {
       console.error('Error updating expense:', err);
     }
   };
-  
 
   return (
     <form className="expense-form" onSubmit={handleSubmit}>
