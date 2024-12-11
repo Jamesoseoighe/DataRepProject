@@ -67,6 +67,10 @@ The project uses the following dependencies:
 - Submit the form to update the expense.
 3. Viewing Graphical Reports
 - Navigate to the "Charts" page.
+   - Bar Chart: Ranks categories by total spending.
+   - Pie Chart: Displays the distribution of expenses.
+4. Deleting an Expense
+- Click the "Delete" button next to an expense to remove it from the list.
 
 View:
 - Horizontal Bar Chart: Ranks categories by total spending.
