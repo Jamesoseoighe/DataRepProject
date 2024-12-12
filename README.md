@@ -5,7 +5,10 @@ Setup Instructions:
 ### Features
 Expense Tracking:
  - Add, edit, and delete expenses.
-- Categorize expenses for better organization.
+ - Categorize expenses for better organization.
+
+Expense Categorization: 
+- Organize expenses by categories like Food, Rent, and Entertainment.
 
 Graphical Reports:
   - View a horizontal bar chart ranking expense categories by total spending.
@@ -36,6 +39,24 @@ Backend
      ```
 Frontend
  - Navigate to the frontend folder:
+    ```bash
+    cd ../frontend
+    ```
+- Install the required Frontend dependencies:
+     ```bash
+     npm install
+     ```
+Start Frontend
+- Start Frontend Server
+   ```bash
+    npm start
+    ```
+Start Backend
+- Start Backend Server
+   ```bash
+    cd backend
+    npm start
+    ```
 
    
 ### Additional Information
@@ -64,7 +85,14 @@ The project uses the following dependencies:
 - Submit the form to update the expense.
 3. Viewing Graphical Reports
 - Navigate to the "Charts" page.
+   - Bar Chart: Ranks categories by total spending.
+   - Pie Chart: Displays the distribution of expenses.
+4. Deleting an Expense
+- Click the "Delete" button next to an expense to remove it from the list.
 
-View:
-- Horizontal Bar Chart: Ranks categories by total spending.
-- Pie Chart: Displays the distribution of expenses.
+### Known Issues
+Limited Currency Conversion:
+
+- Currently, the app only supports USD as the base currency.
+- Solution: Implement functionality to dynamically select the base currency.
+
