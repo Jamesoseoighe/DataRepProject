@@ -27,7 +27,13 @@ const Home = () => {
       <h1>{getGreeting()}</h1>
       <p style={{ fontSize: '1.2em' }}>Welcome to the Currency Exchange and Budget Tracker App!</p>
       <p>Track live exchange rates, manage your budget, and convert currencies effortlessly.</p>
+
       <p style={{ fontSize: '1.1em', fontWeight: 'bold' }}>It is currently {time}.</p>
+
+      <div style={{ marginTop: '30px', fontSize: '1.2em' }}>
+        <p>Total Expenses: <strong>$450.00</strong></p>
+        <p>Top Spending Category: <strong>Food</strong></p>
+      </div>
 
       {/* Navigation Links */}
       <div style={{ marginTop: '30px' }}>
