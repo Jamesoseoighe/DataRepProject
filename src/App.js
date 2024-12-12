@@ -6,11 +6,13 @@ import Footer from './components/footer';
 import ExchangeRates from './components/ExchangeRates';
 import BudgetTracker from './components/BudgetTracker';
 import Home from './components/home';
+import Header from './components/Header'; // Correct Import
 import TopChartsPage from './components/TopChartsPage';
 
 function App() {
   return (
     <Router>
+      <Header/> {/* Add Header here */}
       {/* Navigation Bar */}
       <NavigationBar />
 
