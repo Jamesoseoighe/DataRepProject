@@ -35,6 +35,8 @@ const Home = () => {
         <p>Top Spending Category: <strong>Food</strong></p>
       </div>
 
+      
+
       {/* Navigation Links */}
       <div style={{ marginTop: '30px' }}>
         <Link
@@ -63,6 +65,17 @@ const Home = () => {
           View Charts
         </Link>
       </div>
+      <div style={{ marginTop: '40px' }}>
+      <h3>Frequently Asked Questions</h3>
+      <details>
+        <summary>How do I add an expense?</summary>
+        <p>Navigate to the Budget Tracker page and fill in the expense form.</p>
+      </details>
+      <details>
+        <summary>Can I edit or delete expenses?</summary>
+        <p>Yes, use the Edit or Delete buttons next to each expense in the list.</p>
+      </details>
+    </div>
     </div>
   );
 };
