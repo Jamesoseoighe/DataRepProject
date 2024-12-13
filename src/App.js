@@ -10,6 +10,9 @@ import Header from './components/Header';
 import TopChartsPage from './components/TopChartsPage';
 
 function App() {
+
+
+
   return (
     <Router>
       <Header/> {/* Add Header here */}
