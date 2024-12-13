@@ -6,7 +6,7 @@ import Footer from './components/footer';
 import ExchangeRates from './components/ExchangeRates';
 import BudgetTracker from './components/BudgetTracker';
 import Home from './components/home';
-import Header from './components/Header'; // Correct Import
+import Header from './components/Header'; 
 import TopChartsPage from './components/TopChartsPage';
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
 
       {/* Define Routes */}
       <Routes>
-      <Route path="/" element={<Navigate to="/home" />} /> //starts on /home instead of 
+      <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/exchange-rates" element={<ExchangeRates />} />
         <Route path="/budget-tracker" element={<BudgetTracker />} />
